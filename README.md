@@ -1,4 +1,4 @@
-# RealtimeSDKDemoTester
+# realtime-sdk-demo-ios
 
 Use with RealtimeSDK Swift package to create a Realtime client.
 
