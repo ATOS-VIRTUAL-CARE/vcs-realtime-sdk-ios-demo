@@ -11,22 +11,20 @@ import UIKit
 
 class RealtimeSDKManager {
 
-    var room: Room?
+    let realtimeServer = "demo.virtualcareservices.net"
+
     var sdk: VCSRealtime?
-
-    public var host: String?
-    public var name: String?
-    var token: String?
-    let logTag = "RealtimeSDKManager"
-
     var logger = Logger()
 
-    var remoteParticipant: RemoteParticipant?
+    private(set) var room: Room?
+
+    let logTag = "RealtimeSDKManager"
 
     // events to the Room View Controller
-    var onRoomJoined: (() -> Void)?
+    var onRoomJoined: ((Room) -> Void)?
     var onRoomInitFailure: ((Error) -> Void)?
-    var onParticipantJoined: ((String) -> Void)?
+    var onParticipantJoined: ((RemoteParticipant) -> Void)?
+    var onParticipantLeft: ((RemoteParticipant) -> Void)?
     var onConnectionRejected: (() -> Void)?
 
     func initialize() {
@@ -36,10 +34,7 @@ class RealtimeSDKManager {
 
     func joinRoom(_ token: String, _ name: String, _ audio: Bool, _ video: Bool) {
 
-        let roomHost = host ?? "demo.virtualcareservices.net"
-        let userName = !name.isEmpty ? name : randomUserName()
-
-        var options = VCSRealtime.RoomOptions(host: roomHost, name: userName)
+        var options = VCSRealtime.RoomOptions(host: realtimeServer, name: name)
         options.audio = audio
         options.video = video
         options.hdVideo = video
@@ -76,7 +71,7 @@ class RealtimeSDKManager {
 
         let currentStatus = room.hasVideo()
         if currentStatus != enable {
-            let videoEnabled = room.toggleVideo()
+            let videoEnabled = room.toggleVideo(hdVideo: room.hasHdVideo())
             Logger.debug(logTag, "Local video is now \(videoEnabled ? "enabled" : "not enabled")")
         }
     }
@@ -85,31 +80,36 @@ class RealtimeSDKManager {
         room?.switchCamera()
     }
 
-    func setVideoView(_ view: UIView, _ local: Bool) {
+    func setLocalVideoView(_ view: UIView) {
         guard let room = room else {
             Logger.debug(logTag, "room not ready")
             return
         }
 
-        if local, let participant = room.localParticipant() {
+        if let participant = room.localParticipant() {
+            Logger.debug(self.logTag, "1 view.frame = \(view.frame)")
+            Logger.debug(self.logTag, "1 view.subviews.count = \(view.subviews.count)")
+            for (index, v) in view.subviews.enumerated() {
+                Logger.debug(self.logTag, "1 view.subviews[\(index)].frame = \(v.frame)")
+            }
             participant.setVideoView(view)
-        } else if !local, let remoteParticipants = room.remoteParticipants(), let participant = remoteParticipants.first {
-            participant.setVideoView(view)
+            Logger.debug(self.logTag, "2 view.frame = \(view.frame)")
+            Logger.debug(self.logTag, "2 view.subviews.count = \(view.subviews.count)")
+            for (index, v) in view.subviews.enumerated() {
+                Logger.debug(self.logTag, "2 view.subviews[\(index)].frame = \(v.frame)")
+            }
         }
     }
 
-    // MARK: private methods
-    private func randomUserName() -> String {
-        let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        let length = 6
-        return String((0..<length).map{ _ in letters.randomElement()! })
-    }
 }
 
 extension RealtimeSDKManager: VCSRealtimeProtocol {
     func onRoomInitialized(room: Room) {
         self.room = room
-        onRoomJoined?()
+        room.remoteParticipants()?.forEach { participant in
+            RoomParticipantManager.addParticipant(participant: participant)
+        }
+        onRoomJoined?(room)
     }
 
     func onRoomInitError(error: Error) {
@@ -118,46 +118,47 @@ extension RealtimeSDKManager: VCSRealtimeProtocol {
     }
 
     func onRoomLeft(room: Room) {
-        if room.roomId == self.room?.roomId {
-            Logger.debug(logTag, "Left the room, roomName = \(room.name ?? "")")
-            self.room = nil
-        } else {
+        guard room.roomId == self.room?.roomId else {
             Logger.debug(logTag, "Ignoring the Room Left event for  roomName = \(room.name ?? "") - user not part of it")
+            return
         }
+
+        Logger.debug(logTag, "Left the room, roomName = \(room.name ?? "")")
+        self.room = nil
+
+        RoomParticipantManager.resetParticipantList()
     }
 
     func onParticipantJoined(room: Room, participant: RemoteParticipant) {
-        if room.roomId == self.room?.roomId {
-            Logger.debug(logTag, "Participant joined the room, participant = \(participant.address), roomName = \(room.name ?? "")")
-            remoteParticipant = participant
-            onParticipantJoined?(participant.name ?? "")
-        } else {
+        guard room.roomId == self.room?.roomId else {
             Logger.debug(logTag, "Participant joined, no matching room")
+            return
         }
+
+        Logger.debug(logTag, "Participant joined the room, participant = \(participant.address), name = \(participant.name ?? "")")
+        RoomParticipantManager.addParticipant(participant: participant)
+
+        onParticipantJoined?(participant)
     }
 
     func onParticipantLeft(room: Room, participant: RemoteParticipant) {
-        if room.roomId == self.room?.roomId {
-            Logger.debug(logTag, "Participant left the room, participant = \(participant.address), roomName = \(room.name ?? "")")
-            if participant.address == (remoteParticipant?.address ?? "") {
-            }
-        } else {
+        guard room.roomId == self.room?.roomId else {
             Logger.debug(logTag, "Participant left, no matching room")
+            return
         }
+
+        Logger.debug(logTag, "Participant left the room, participant = \(participant.address), roomName = \(room.name ?? "")")
+        onParticipantLeft?(participant)
+
+        RoomParticipantManager.removeParticipant(participant: participant)
     }
 
     func onLocalStreamUpdated(room: Room, participant: LocalParticipant) {
-        let mediaStream = participant.stream
-        Logger.debug(logTag, "LocalStream  \(mediaStream ?? "") updated")
+        Logger.debug(logTag, "LocalStream  \(participant.stream ?? "") updated")
     }
 
     func onRemoteStreamUpdated(room: Room, participant: RemoteParticipant) {
-        let mediaStream = participant.stream
-        Logger.debug(logTag, "RemoteStream video: \(participant.hasVideo() ? "Enabled" : "Disabled")  mediaStrea: \(mediaStream ?? "")  ")
-
-        if remoteParticipant == nil || remoteParticipant?.address == participant.address {
-            remoteParticipant = participant
-        }
+        Logger.debug(logTag, "RemoteStream video: \(participant.hasVideo() ? "Enabled" : "Disabled")  mediaStrea: \(participant.stream ?? "")  ")
     }
 }
 

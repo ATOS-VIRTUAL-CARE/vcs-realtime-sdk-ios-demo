@@ -147,8 +147,12 @@ class ViewController: UIViewController {
         if segue.identifier == "showCallView",
             let roomVC = segue.destination as? RoomViewController {
             roomVC.token = token
+            if let userName = yourName.text, userName.isEmpty {
+                yourName.text = randomUserName()
+            }
             roomVC.name = yourName.text
             roomVC.roomName = roomName.text
+            RoomParticipantManager.resetParticipantList()
 
             if let media = self.joinWithMedia.titleForSegment(at: self.joinWithMedia.selectedSegmentIndex) {
                 roomVC.audioMedia = (media != "Video")      // Audio or Audio/Video is selected
@@ -160,6 +164,13 @@ class ViewController: UIViewController {
                 #endif
             }
         }
+    }
+
+    // MARK: private methods
+    private func randomUserName() -> String {
+        let letters = "abcdefghijklmnopqrstuvwxyz0123456789"
+        let length = 4
+        return "user \(String((0..<length).map{ _ in letters.randomElement()! }))"
     }
 }
 
