@@ -1,32 +1,50 @@
-# realtime-sdk-demo-ios
+# VCS Realtime SDK Sample App for iOS
 
-Use with RealtimeSDK Swift package to create a Realtime client.
+This sample app uses the Virtual Care Service (VCS) Realtime iOS SDK to demonstrate how to join virtual rooms and interact with other participants via audio and/or video.
+
+## Create the Sample Application
+
+To create the sample app, open the ```RealtimeSDKDemo.xcodeproj``` file in the ```examples/RealtimeSDKDemo``` directory with Xcode and perform the following steps:
 
 #### Step 1
+
 Remove RealtimeSDK.framework from the Frameworks folder
 
 #### Step 2
+
+In the RealtimeSDKDemo target, change the Team and Bundle Identifier to the appropriate values for your development environment.
+
+#### Step 3
+
 Include the following dependent Swift packages manually:
 
 ##### RealtimeSDK
+
 ```html
 https://github.com/ATOS-VIRTUAL-CARE/realtime-sdk-ios
 ```
 
-##### Apollo for iOS
+##### WebRTC
+
 ```html
-https://github.com/phanikavi/apollo-ios
+https://github.com/ATOS-VIRTUAL-CARE/WebRTC
 ```
 
-Include the following package products
+##### Apollo for iOS
+
+```html
+https://github.com/ATOS-VIRTUAL-CARE/apollo-ios
+```
+
+As part of the apollo-ios package installation, include the following package products:
+
 * Apollo
 * ApolloCore
 * ApolloWebSocket
 
-##### WebRTC
-```html
-https://github.com/stasel/WebRTC
-```
+### Build and Run
+
+Build the app and run on a device or the simulator. Note that the simulator does not provide video.
 
 ### More Information
 
