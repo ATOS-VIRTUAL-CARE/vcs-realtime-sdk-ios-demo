@@ -1,5 +1,7 @@
 # VCS Realtime SDK Sample App for iOS
 
+<img src="https://user-images.githubusercontent.com/5943844/122239625-169d8800-ce8f-11eb-903c-75c5add95f93.jpeg" width="100" />
+
 This sample app uses the Virtual Care Service (VCS) Realtime iOS SDK to demonstrate how to join virtual rooms and interact with other participants via audio and/or video.
 
 ## Create the Sample Application
