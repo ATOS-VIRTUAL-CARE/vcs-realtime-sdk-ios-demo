@@ -32,13 +32,13 @@ class RoomParticipantManager {
             ])
 
         // Add 'participant.name' label to the UIView
-        let userName = UILabel(frame: CGRect(x: 20, y: view.frame.height - 5, width: 200, height: 40))
+        let userName = UILabel(frame: CGRect(x: 20, y: view.frame.height + 10, width: 200, height: 40))
         let shadow = NSShadow()
         shadow.shadowColor = UIColor.black
-        shadow.shadowBlurRadius = 5
+        shadow.shadowBlurRadius = 10
         let attributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 24),
-            .foregroundColor: UIColor.white,
+            .font: UIFont.systemFont(ofSize: 18),
+            .foregroundColor: UIColor(red: 200, green: 200, blue: 200, alpha: 0.5),
             .shadow: shadow
         ]
         userName.attributedText = NSMutableAttributedString.init(string: participant.name ?? "", attributes: attributes)

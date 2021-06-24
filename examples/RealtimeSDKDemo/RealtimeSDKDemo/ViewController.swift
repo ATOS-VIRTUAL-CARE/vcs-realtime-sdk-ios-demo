@@ -49,7 +49,12 @@ class ViewController: UIViewController {
 
         mainStackView.setCustomSpacing(30, after: joinWithMedia)
 
-        activityIndicator.style = UIActivityIndicatorView.Style.large
+        if #available(iOS 13.0, *) {
+            activityIndicator.style = UIActivityIndicatorView.Style.large
+        } else {
+            // Fallback on earlier versions
+            activityIndicator.style = UIActivityIndicatorView.Style.whiteLarge
+        }
 
         Logger.debug(logTag, "RealtimeSDKDemo application initialized")
     }

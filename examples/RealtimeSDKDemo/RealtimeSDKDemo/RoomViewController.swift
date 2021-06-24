@@ -12,6 +12,7 @@ class RoomViewController: UIViewController {
 
     @IBOutlet weak var localVideoView: UIView!
     @IBOutlet weak var leaveRoom: UIButton!
+    @IBOutlet weak var speaker: UIButton!
     @IBOutlet weak var microphone: UIButton!
     @IBOutlet weak var video: UIButton!
     @IBOutlet weak var switchCameraButton: UIButton!
@@ -26,6 +27,7 @@ class RoomViewController: UIViewController {
     var videoMedia: Bool = false
 
     var muteStatus: Bool = false
+    var speakerStatus: Bool = false
     var videoEnabled: Bool = false
 
     var controlsTimer: Timer?
@@ -40,7 +42,9 @@ class RoomViewController: UIViewController {
         leaveRoom.layer.cornerRadius = 5
         video.layer.cornerRadius = 5
         microphone.layer.cornerRadius = 5
+        speaker.layer.cornerRadius = 5
         switchCameraButton.isHidden = !videoMedia
+        leaveRoom.setBackgroundImage(UIImage(named: "hangup"), for: .normal)
         #if !arch(arm64)
         video.isEnabled = false
         microphone.isEnabled = false
@@ -54,6 +58,10 @@ class RoomViewController: UIViewController {
 
         // Add a tap gesture recognizer
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleTap)))
+
+        // Set up the pan gesture recognizer to allow moving the local video view
+        let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        self.localVideoView.addGestureRecognizer(gestureRecognizer)
 
         Logger.debug(logTag, "viewDidLoad - RoomViewController started with audio=\(audioMedia) video=\(videoMedia)")
 
@@ -87,6 +95,8 @@ class RoomViewController: UIViewController {
 
         let image = muteStatus ? UIImage(named: "microphoneoff.png") : UIImage(named: "microphone.png")
         microphone.setImage(image, for: .normal)
+
+        startControlButtonsTimer()
     }
 
     @IBAction func video(_ sender: Any) {
@@ -97,6 +107,23 @@ class RoomViewController: UIViewController {
 
         realtimeSDK.setLocalVideoView(self.localVideoView)
         showLocalVideo(show: videoEnabled)
+
+        startControlButtonsTimer()
+    }
+
+    @IBAction func speaker(_ sender: Any) {
+
+        speakerStatus = !speakerStatus
+
+        realtimeSDK.setSpeaker(speakerStatus)
+
+        if speakerStatus {
+            speaker.isSelected = true
+        } else {
+            speaker.isSelected = false
+        }
+
+        startControlButtonsTimer()
     }
 
     @IBAction func switchCamera(_ sender: Any) {
@@ -119,6 +146,7 @@ class RoomViewController: UIViewController {
         self.view.bringSubviewToFront(controlButtonsStack)
 
         let interval:TimeInterval = 5.0
+        controlsTimer?.invalidate()
         controlsTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { (timer) in
             self.controlsTimer?.invalidate()
 
@@ -208,6 +236,55 @@ extension RoomViewController {
             self.present(alert, animated: true, completion: nil)
         }
     }
+
+    @objc func handlePan(_ gestureRecognizer: UIPanGestureRecognizer) {
+        if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
+
+            let translation = gestureRecognizer.translation(in: self.view)
+
+            // Get the position of the local video view
+            let x = gestureRecognizer.view?.frame.origin.x ?? 0
+            let y = gestureRecognizer.view?.frame.origin.y ?? 0
+
+            // Get the size of the local video view
+            let viewWidth = gestureRecognizer.view?.frame.width ?? 0
+            let viewHeight = gestureRecognizer.view?.frame.height ?? 0
+
+            // Get the screen size
+            let screenWidth = UIScreen.main.bounds.size.width
+            let screenHeight = UIScreen.main.bounds.size.height
+
+            // Check the top bounds
+            if x < 0 {
+                gestureRecognizer.view?.frame.origin.x = 0
+                return
+            }
+
+            // Check the left bounds
+            if y < 0 {
+                gestureRecognizer.view?.frame.origin.y = 0
+                return
+            }
+
+            // Check the right bounds
+            if x + viewWidth > screenWidth {
+                gestureRecognizer.view?.frame.origin.x = screenWidth - viewWidth
+                return
+            }
+
+            // Check the bottom bounds
+            if y + viewHeight > screenHeight {
+                gestureRecognizer.view?.frame.origin.y = screenHeight - viewHeight
+                return
+            }
+
+            // If we're this far, move the view
+            gestureRecognizer.view!.center = CGPoint(x: gestureRecognizer.view!.center.x + translation.x, y: gestureRecognizer.view!.center.y + translation.y)
+
+            gestureRecognizer.setTranslation(CGPoint.zero, in: self.view)
+        }
+    }
+
 }
 
 // MARK: participant stack view management

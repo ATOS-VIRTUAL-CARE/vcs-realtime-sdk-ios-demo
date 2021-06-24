@@ -64,6 +64,18 @@ class RealtimeSDKManager {
         }
     }
 
+    func setSpeaker(_ status: Bool) {
+        guard let room = room else {
+            return
+        }
+
+        let currentStatus = room.isSpeaker()
+        if currentStatus != status {
+            let newStatus = room.toggleSpeaker()
+            Logger.debug(logTag, "Speaker is now \(newStatus ? "enabled" : "disabled")")
+        }
+    }
+
     func setVideoEnabled(_ enable: Bool) {
         guard let room = room else {
             return
