@@ -6,7 +6,7 @@ This sample app uses the Virtual Care Service (VCS) Realtime iOS SDK to demonstr
 
 ## Create the Sample Application
 
-To create the sample app, open the ```RealtimeSDKDemo.xcodeproj``` file in the ```examples/RealtimeSDKDemo``` directory with Xcode and perform the following steps:
+To create the sample app, clone this repository, then open the ```RealtimeSDKDemo.xcodeproj``` file in the ```examples/RealtimeSDKDemo``` directory with Xcode. Then perform the following steps:
 
 #### Step 1
 
@@ -29,19 +29,25 @@ https://github.com/ATOS-VIRTUAL-CARE/realtime-sdk-ios
 ##### WebRTC
 
 ```html
-https://github.com/ATOS-VIRTUAL-CARE/WebRTC
+https://github.com/ATOS-VIRTUAL-CARE/webrtc-ios
 ```
 
 ##### Apollo for iOS
 
 ```html
 https://github.com/ATOS-VIRTUAL-CARE/apollo-ios
+
+branch: graphql-transport-ws
 ```
 
-As part of the apollo-ios package installation, include the following package products:
+**IMPORTANT**
+
+For the apollo-ios package, be sure the ```graphql-transport-ws``` branch is selected, rather than a release version.
+
+Also, when the Apollo package is imported, only select the following package products:
 
 * Apollo
-* ApolloCore
+* ApolloAPI
 * ApolloWebSocket
 
 ### Build and Run
