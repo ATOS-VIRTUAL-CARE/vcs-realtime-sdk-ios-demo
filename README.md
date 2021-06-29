@@ -50,6 +50,6 @@ Build the app and run on a device or the simulator. Note that the simulator does
 
 ### More Information
 
-See the following for more information on using the iOS SDK:
-
-https://sdk.virtualcareservices.net/sdks/ios/
+* For more information on the VCS SDK family, see the [VCS realtime SDK page](https://sdk.virtualcareservices.net/)
+* For more information on the VCS iOS SDK, see the [guide for iOS realtime SDK](https://sdk.virtualcareservices.net/sdks/ios)
+* A list of all APIs for the iOS SDK is available at the [reference API for iOS realtime SDK](https://sdk.virtualcareservices.net/reference/ios)
