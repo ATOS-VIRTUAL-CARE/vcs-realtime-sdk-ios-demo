@@ -38,7 +38,7 @@ class Logger {
 
 }
 
-extension Logger: VCSRealtimeLogProtocol {
+extension Logger: RealtimeSDKiOSLogProtocol {
     func logEvent(message: String) {
         print(message)
     }

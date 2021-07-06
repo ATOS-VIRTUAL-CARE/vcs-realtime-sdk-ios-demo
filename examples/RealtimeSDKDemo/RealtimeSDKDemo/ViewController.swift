@@ -34,7 +34,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
 
         appVersion.text = "App Version: \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") ?? "")"
-        sdkVersion.text = "SDK Version: \(VCSRealtime.version)"
+        sdkVersion.text = "SDK Version: \(RealtimeSDKiOS.version)"
 
         // Call the 'keyboardWillShow' function when the view controller receives
         // the notification that a keyboard is going to be shown.
@@ -57,6 +57,10 @@ class ViewController: UIViewController {
         }
 
         Logger.debug(logTag, "RealtimeSDKDemo application initialized")
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
     @IBAction func createRoom(_ sender: Any) {
@@ -127,6 +131,14 @@ class ViewController: UIViewController {
                 self.performSegue(withIdentifier: "showCallView", sender: nil)
             }
         }
+    }
+
+    @IBAction func onSettingsButton(_ sender: Any) {
+        Logger.debug(logTag, "Settings button pressed")
+
+        let vc = SettingsTableViewController()
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     @objc func keyboardWillShow(notification: NSNotification) {

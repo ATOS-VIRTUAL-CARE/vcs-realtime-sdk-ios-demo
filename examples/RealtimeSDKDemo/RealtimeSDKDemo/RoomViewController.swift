@@ -32,6 +32,12 @@ class RoomViewController: UIViewController {
 
     var controlsTimer: Timer?
 
+    // Set the status bar text to light so it can be seen against the
+    // black background.
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+
     let logTag = "RoomView"
 
     let realtimeSDK = RealtimeSDKManager()
@@ -49,12 +55,6 @@ class RoomViewController: UIViewController {
         video.isEnabled = false
         microphone.isEnabled = false
         #endif
-
-        participantStackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            participantStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            participantStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            ])
 
         // Add a tap gesture recognizer
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleTap)))

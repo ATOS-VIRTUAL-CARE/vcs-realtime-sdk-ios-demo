@@ -25,11 +25,6 @@ class RoomParticipantManager {
 
     static func addParticipant(participant: RemoteParticipant) {
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            view.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
-            view.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width/1.77),
-            ])
 
         // Add 'participant.name' label to the UIView
         let userName = UILabel(frame: CGRect(x: 20, y: view.frame.height + 10, width: 200, height: 40))

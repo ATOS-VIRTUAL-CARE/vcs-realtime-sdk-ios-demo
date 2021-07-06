@@ -13,7 +13,7 @@ class RealtimeSDKManager {
 
     let realtimeServer = "demo.virtualcareservices.net"
 
-    var sdk: VCSRealtime?
+    var sdk: RealtimeSDKiOS?
     var logger = Logger()
 
     private(set) var room: Room?
@@ -28,16 +28,18 @@ class RealtimeSDKManager {
     var onConnectionRejected: (() -> Void)?
 
     func initialize() {
-        sdk = VCSRealtime(delegate: self)
-        sdk?.subscribeLogEvents(delegate: logger, severity: LogSeverity.debug)
+        sdk = RealtimeSDKiOS(delegate: self)
+
+        let logSeverity: LogSeverity = SettingsTableViewController.isSet(.debugLogging) ? .verbose : .debug
+        sdk?.subscribeLogEvents(delegate: logger, severity: logSeverity)
     }
 
     func joinRoom(_ token: String, _ name: String, _ audio: Bool, _ video: Bool) {
 
-        var options = VCSRealtime.RoomOptions(host: realtimeServer, name: name)
+        var options = RealtimeSDKiOS.RoomOptions(host: realtimeServer, name: name)
         options.audio = audio
         options.video = video
-        options.hdVideo = video
+        options.hdVideo = video && SettingsTableViewController.isSet(.hdVideo)
         options.participantInfo = ["age" : 18]
 
         sdk?.joinRoom(token: token, options: options) { error in
@@ -115,7 +117,7 @@ class RealtimeSDKManager {
 
 }
 
-extension RealtimeSDKManager: VCSRealtimeProtocol {
+extension RealtimeSDKManager: RealtimeSDKiOSProtocol {
     func onRoomInitialized(room: Room) {
         self.room = room
         room.remoteParticipants()?.forEach { participant in
