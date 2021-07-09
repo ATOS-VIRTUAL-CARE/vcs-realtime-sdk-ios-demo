@@ -23,7 +23,7 @@ Include the following dependent Swift packages manually:
 ##### RealtimeSDK
 
 ```html
-https://github.com/ATOS-VIRTUAL-CARE/realtime-sdk-ios
+https://github.com/ATOS-VIRTUAL-CARE/vcs-realtime-sdk-ios
 ```
 
 ##### WebRTC
