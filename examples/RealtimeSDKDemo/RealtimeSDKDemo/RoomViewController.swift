@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import RealtimeSDK
+import VcsRealtimeSdk
 
 class RoomViewController: UIViewController {
 

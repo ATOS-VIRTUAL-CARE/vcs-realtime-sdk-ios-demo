@@ -64,17 +64,17 @@ class RoomTokenManager {
         }
     }
 
-    func createRoomToken(_ roomName: String, completion: @escaping (String?) -> Void) {
+    func createRoomToken(_ roomName: String, completion: @escaping (String?, String?) -> Void) {
 
         guard !roomName.isEmpty else {
             Logger.debug(logTag, "Room name is empty")
-            completion(nil)
+            completion(nil, "Room name is empty")
             return
         }
 
         guard let roomNameEscaped = roomName.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else {
             Logger.debug(logTag, "Escaped Room name is empty")
-            completion(nil)
+            completion(nil, "Escaped Room name is empty")
             return
         }
 
@@ -90,10 +90,11 @@ class RoomTokenManager {
 
             guard let response = results.response else {
                 Logger.debug(self.logTag, "No response from POST request for \(url?.absoluteString ?? "<unknown URL>")")
-                completion(nil)
+                completion(nil, "No response from POST request for \(url?.absoluteString ?? "<unknown URL>")")
                 return
             }
 
+            var error = ""
             switch response.httpStatusCode {
                 case 200:
                     Logger.debug(self.logTag, "200 response from POST request for \(url?.absoluteString ?? "<unknown URL>")")
@@ -102,15 +103,25 @@ class RoomTokenManager {
                        let jsonDictionary = try? JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any?>,
                        let room = jsonDictionary["room"] as? Dictionary<String, Any?>,
                        let token = room["token"] as? String {
-                        completion(token)
+
+                        completion(token, nil)
                         return
                     } else {
                         Logger.debug(self.logTag, "token not found for room = \(roomName), httpStatusCode = \(results.response?.httpStatusCode ?? 0)")
                     }
+                case 409:
+                    if let data = results.data, let errorText = String(data: data, encoding: .utf8) {
+                        Logger.debug(self.logTag, "Unexpected response from POST request for \(url?.absoluteString ?? "<unknown URL>") httpStatusCode: \(response.httpStatusCode) error: \(errorText)")
+                        error = errorText
+                    } else {
+                        Logger.debug(self.logTag, "Unexpected 409 response from POST request for \(url?.absoluteString ?? "<unknown URL>") httpStatusCode: \(response.httpStatusCode)")
+                        error = "Unexpected 409 response from POST request"
+                    }
                 default:
                     Logger.debug(self.logTag, "Unexpected response from POST request for \(url?.absoluteString ?? "<unknown URL>") httpStatusCode: \(response.httpStatusCode)")
+                    error = "Unexpected response from POST request"
             }
-            completion(nil)
+            completion(nil, error)
         }
     }
 

@@ -6,14 +6,14 @@
 //
 
 import Foundation
-import RealtimeSDK
+import VcsRealtimeSdk
 import UIKit
 
 class RealtimeSDKManager {
 
     let realtimeServer = "demo.virtualcareservices.net"
 
-    var sdk: RealtimeSDKiOS?
+    var sdk: RealtimeSDK?
     var logger = Logger()
 
     private(set) var room: Room?
@@ -28,7 +28,7 @@ class RealtimeSDKManager {
     var onConnectionRejected: (() -> Void)?
 
     func initialize() {
-        sdk = RealtimeSDKiOS(delegate: self)
+        sdk = RealtimeSDK(delegate: self)
 
         let logSeverity: LogSeverity = SettingsTableViewController.isSet(.debugLogging) ? .verbose : .debug
         sdk?.subscribeLogEvents(delegate: logger, severity: logSeverity)
@@ -36,11 +36,13 @@ class RealtimeSDKManager {
 
     func joinRoom(_ token: String, _ name: String, _ audio: Bool, _ video: Bool) {
 
-        var options = RealtimeSDKiOS.RoomOptions(host: realtimeServer, name: name)
+        var options = RealtimeSDK.RoomOptions(host: realtimeServer, name: name)
         options.audio = audio
         options.video = video
         options.hdVideo = video && SettingsTableViewController.isSet(.hdVideo)
         options.participantInfo = ["age" : 18]
+
+        sdk?.advanced.monitorCallQuality = SettingsTableViewController.isSet(.monitorQoS)
 
         sdk?.joinRoom(token: token, options: options) { error in
             if let error = error {
@@ -117,7 +119,7 @@ class RealtimeSDKManager {
 
 }
 
-extension RealtimeSDKManager: RealtimeSDKiOSProtocol {
+extension RealtimeSDKManager: RealtimeSDKProtocol {
     func onRoomInitialized(room: Room) {
         self.room = room
         room.remoteParticipants()?.forEach { participant in

@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import RealtimeSDK
+import VcsRealtimeSdk
 
 class ViewController: UIViewController {
 
@@ -34,7 +34,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
 
         appVersion.text = "App Version: \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") ?? "")"
-        sdkVersion.text = "SDK Version: \(RealtimeSDKiOS.version)"
+        sdkVersion.text = "SDK Version: \(RealtimeSDK.version)"
 
         // Call the 'keyboardWillShow' function when the view controller receives
         // the notification that a keyboard is going to be shown.
@@ -71,13 +71,21 @@ class ViewController: UIViewController {
         self.view.endEditing(true)
 
         activityIndicator.startAnimating()
-        tokenManager.createRoomToken(roomName) { token in
+        tokenManager.createRoomToken(roomName) { (token, errorMessage) in
             DispatchQueue.main.async {
                 self.activityIndicator.stopAnimating()
             }
 
             guard let token = token else {
-                Logger.debug(self.logTag, "error in creating room")
+                Logger.debug(self.logTag, "error in creating room, \(errorMessage ?? "")")
+                DispatchQueue.main.async {
+
+                    let alert = UIAlertController(title: "Error creating room", message: "\(errorMessage ?? "")", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+                        Logger.debug(self.logTag, "The \"OK\" alert occurred.")
+                    }))
+                    self.present(alert, animated: true, completion: nil)
+                }
                 return
             }
 

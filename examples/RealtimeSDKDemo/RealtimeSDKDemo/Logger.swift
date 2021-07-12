@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import RealtimeSDK
+import VcsRealtimeSdk
 
 class Logger {
 
@@ -38,7 +38,7 @@ class Logger {
 
 }
 
-extension Logger: RealtimeSDKiOSLogProtocol {
+extension Logger: RealtimeSDKLogProtocol {
     func logEvent(message: String) {
         print(message)
     }

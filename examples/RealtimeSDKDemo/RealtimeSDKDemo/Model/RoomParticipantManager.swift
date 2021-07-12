@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-import RealtimeSDK
+import VcsRealtimeSdk
 
 class RoomParticipant {
     let address: String
