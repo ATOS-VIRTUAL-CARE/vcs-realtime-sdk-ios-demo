@@ -10,7 +10,7 @@ To create the sample app, clone this repository, then open the ```RealtimeSDKDem
 
 #### Step 1
 
-Remove RealtimeSDK.framework from the Frameworks folder
+Remove VcsRealtimeSdk.framework from the Frameworks folder
 
 #### Step 2
 
