@@ -37,8 +37,9 @@ https://github.com/ATOS-VIRTUAL-CARE/webrtc-ios
 ```html
 https://github.com/ATOS-VIRTUAL-CARE/apollo-ios
 ```
+Branch for apollo-ios package
 ```
-branch: graphql-transport-ws
+graphql-transport-ws
 ```
 
 **IMPORTANT**
