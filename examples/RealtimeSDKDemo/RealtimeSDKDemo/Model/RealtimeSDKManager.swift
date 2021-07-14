@@ -126,6 +126,7 @@ extension RealtimeSDKManager: RealtimeSDKProtocol {
             RoomParticipantManager.addParticipant(participant: participant)
         }
         onRoomJoined?(room)
+        room.scaleDownVideo(enable: SettingsTableViewController.isSet(.scaleDownVideo), connectionId: nil, width: nil)
     }
 
     func onRoomInitError(error: Error) {

@@ -15,6 +15,7 @@ class SettingsTableViewController: UITableViewController {
         case hdVideo = "Enable HD video"
         case debugLogging = "Enable debug logs"
         case monitorQoS = "Monitor call quality"
+        case scaleDownVideo = "Scale down video resolution"
         case preferredCodec = "Preferred video codec"
     }
 
@@ -82,6 +83,8 @@ class SettingsTableViewController: UITableViewController {
                 Logger.debug(logTag, "QoS monitoring is now \(isOn ? "ON" : "OFF")")
             case .preferredCodec:
                 Logger.debug(logTag, "unexpected event")
+            case .scaleDownVideo:
+                Logger.debug(logTag, "QoS monitoring is now \(isOn ? "ON" : "OFF")")
         }
         UserDefaults.standard.setValue(isOn, forKey: "RealtimeSDKDemo_\(type.rawValue)")
     }
