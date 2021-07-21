@@ -37,14 +37,8 @@ https://github.com/ATOS-VIRTUAL-CARE/webrtc-ios
 ```html
 https://github.com/ATOS-VIRTUAL-CARE/apollo-ios
 ```
-Branch for apollo-ios package
-```
-graphql-transport-ws
-```
 
 **IMPORTANT**
-
-For the apollo-ios package, be sure the ```graphql-transport-ws``` branch is selected, rather than a release version.
 
 Also, when the Apollo package is imported, only select the following package products:
 
