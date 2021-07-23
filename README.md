@@ -53,6 +53,14 @@ When the Apollo package is imported, only select the following package products:
 
 Build the application and run on a device or the simulator. Note that the simulator does not provide video.
 
+Once the application is running, do the following:
+
+- Enter a name in the **Room name** field
+- Enter a name in the **Your name** field (optional)
+- Select the media type (Audio only/Video only/Audio and Video)
+- Tap on **Create Room** to create and join the room
+- From another client, join the room using the same room name
+
 ### More Information
 
 Where to find more information about the VCS Realtime SDKs and APIs.
