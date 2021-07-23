@@ -1,54 +1,57 @@
-# VCS Realtime SDK Sample App for iOS
+# VCS Realtime SDK Sample Application for iOS
 
 <img src="https://user-images.githubusercontent.com/5943844/122239625-169d8800-ce8f-11eb-903c-75c5add95f93.jpeg" width="100" />
 
-This sample app uses the Virtual Care Service (VCS) Realtime iOS SDK to demonstrate how to join virtual rooms and interact with other participants via audio and/or video.
+This repository provides a sample application written in Swift, using the Virtual Care Service (VCS) Realtime iOS SDK to demonstrate how to join virtual rooms and interact with other participants via audio and/or video. 
 
-## Create the Sample Application
+## How to Run the Sample Application
 
-To create the sample app, clone this repository, then open the ```RealtimeSDKDemo.xcodeproj``` file in the ```examples/RealtimeSDKDemo``` directory with Xcode. Then perform the following steps:
+Perform the following steps to get started with the sample application
 
-#### Step 1
+- [Clone](#clone-the-repository) - Clone the repository
+- [Setup](#setup) - Set up the sample application to run on a device or simulator
+- [Build and Run](#build-and-run) - Build and run the application
+- [More Information](#more-information) - Where to find more information
 
-Remove VcsRealtimeSdk.framework from the Frameworks folder
+### Clone the repository
 
-#### Step 2
+```sh
+git clone https://github.com/ATOS-VIRTUAL-CARE/vcs-realtime-sdk-ios-demo.git
+cd vcs-realtime-sdk-ios-demo
+```
 
-In the RealtimeSDKDemo target, change the Team and Bundle Identifier to the appropriate values for your development environment.
+Using Xcode, open the ```RealtimeSDKDemo.xcodeproj``` file in the ```examples/RealtimeSDKDemo``` directory. Then perform the following steps:
 
-#### Step 3
+### Setup
 
-Include the following dependent Swift packages manually:
+- Remove VcsRealtimeSdk.framework from the Frameworks folder.
 
-##### RealtimeSDK
+- Include the following dependent Swift packages manually:
 
 ```html
 https://github.com/ATOS-VIRTUAL-CARE/vcs-realtime-sdk-ios
 ```
 
-##### WebRTC
-
 ```html
 https://github.com/ATOS-VIRTUAL-CARE/webrtc-ios
 ```
-
-##### Apollo for iOS
 
 ```html
 https://github.com/ATOS-VIRTUAL-CARE/apollo-ios
 ```
 
-**IMPORTANT**
+When the Apollo package is imported, only select the following package products:
 
-Also, when the Apollo package is imported, only select the following package products:
+> * Apollo
+> * ApolloAPI
+> * ApolloWebSocket
 
-* Apollo
-* ApolloAPI
-* ApolloWebSocket
+- In the RealtimeSDKDemo target, change the Team and Bundle Identifier to the appropriate values for your development environment.
+- If necessary, change the server addresses for your specific deployment. The demo application is already configured with the server at [VCS realtime SDK Demo](https://sdk-demo.virtualcareservices.net/)
 
 ### Build and Run
 
-Build the app and run on a device or the simulator. Note that the simulator does not provide video.
+Build the application and run on a device or the simulator. Note that the simulator does not provide video.
 
 ### More Information
 
