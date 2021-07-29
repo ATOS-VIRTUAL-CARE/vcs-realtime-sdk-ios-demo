@@ -51,11 +51,8 @@ When the Apollo package is imported, only select the following package products:
 ```swift
 class RealtimeSDKSettings {
 
-    /// Room token server. Provides tokens based on "Room name" and API key
-    static let roomTokenServer = "sdk-demo.virtualcareservices.net"
-
-    /// VCS Domain server name.  Client connects to the SDK server and provides the room token to join a room.
-    static let vcsDomainServer = "demo.virtualcareservices.net"
+    /// Application server provides room tokens and VCS domain name based on "Room name"  &  API key
+    static let applicationServer =  "sdk-demo.virtualcareservices.net"
 }
 ```
 
