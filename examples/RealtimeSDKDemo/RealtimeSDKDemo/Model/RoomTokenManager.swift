@@ -8,20 +8,19 @@
 import Foundation
 
 class RoomTokenManager {
-    let serverName = "sdk-demo.virtualcareservices.net"
 
     private var restTransactions: [UUID:RestManager]?
     private let logTag = "RealtimeSDKManager"
 
-    func getRoomToken(_ roomName: String, completion: @escaping (String?, Int) -> Void) {
+    func getRoomToken(_ roomName: String, completion: @escaping (String?, String?, Int) -> Void) {
 
         guard !roomName.isEmpty else {
             Logger.debug(logTag, "Room name is empty")
-            completion(nil, 0)
+            completion(nil, nil, 0)
             return
         }
 
-        let url = URL(string: "https://\(serverName)/api/room")
+        let url = URL(string: "https://\(RealtimeSDKSettings.applicationServer)/api/room")
         let rest = RestManager()
         rest.requestHttpHeaders.add(value: "application/json", forKey: "Content-Type")
         rest.requestHttpHeaders.add(value: "*/*", forKey: "accept")
@@ -33,7 +32,7 @@ class RoomTokenManager {
 
             guard let response = results.response else {
                 Logger.debug(self.logTag, "No response from GET request for \(url?.absoluteString ?? "<unknown URL>")")
-                completion(nil, 0)
+                completion(nil, nil, 0)
                 return
             }
 
@@ -44,9 +43,10 @@ class RoomTokenManager {
                     if let data = results.data,
                        let jsonDictionary = try? JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any?>,
                        let room = jsonDictionary["room"] as? Dictionary<String, Any?>,
-                       let token = room["token"] as? String {
-                        Logger.debug(self.logTag, "Token found for room = \(roomName) token = \(token)")
-                        completion(token, 0)
+                       let token = room["token"] as? String,
+                       let domain = jsonDictionary["domain"] as? String {
+                        Logger.debug(self.logTag, "Token found for room = \(roomName) domain = \(domain) token = \(token) ")
+                        completion(domain, token, 0)
                         return
                     } else {
                         Logger.debug(self.logTag, "token not found for room = \(roomName), httpStatusCode = \(results.response?.httpStatusCode ?? 0)")
@@ -54,35 +54,29 @@ class RoomTokenManager {
 
                 case 404:
                     Logger.debug(self.logTag, "Error getting token, 404 response from GET request for \(url?.absoluteString ?? "<unknown URL>")")
-                    completion(nil, 404)
+                    completion(nil, nil, 404)
                     return
 
                 default:
                     Logger.debug(self.logTag, "Unexpected response from GET request for \(url?.absoluteString ?? "<unknown URL>")")
             }
-            completion(nil, 0)
+            completion(nil, nil, 0)
         }
     }
 
-    func createRoomToken(_ roomName: String, completion: @escaping (String?, String?) -> Void) {
+    func createRoomToken(_ roomName: String, completion: @escaping (String?, String?, String?) -> Void) {
 
         guard !roomName.isEmpty else {
             Logger.debug(logTag, "Room name is empty")
-            completion(nil, "Room name is empty")
+            completion(nil, nil, "Room name is empty")
             return
         }
 
-        guard let roomNameEscaped = roomName.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else {
-            Logger.debug(logTag, "Escaped Room name is empty")
-            completion(nil, "Escaped Room name is empty")
-            return
-        }
-
-        let url = URL(string: "https://\(serverName)/api/room")
+        let url = URL(string: "https://\(RealtimeSDKSettings.applicationServer)/api/room")
         let rest = RestManager()
         rest.requestHttpHeaders.add(value: "application/json", forKey: "Content-Type")
         rest.requestHttpHeaders.add(value: "*/*", forKey: "accept")
-        rest.httpBody = "{ \"name\": \"\(roomNameEscaped)\"}".data(using: .utf8)
+        rest.httpBody = "{ \"name\": \"\(roomName)\"}".data(using: .utf8)
 
         addRestTransaction(rest: rest)
         rest.makeRequest(toURL: url!, withHttpMethod: .post) { (results) in
@@ -90,7 +84,7 @@ class RoomTokenManager {
 
             guard let response = results.response else {
                 Logger.debug(self.logTag, "No response from POST request for \(url?.absoluteString ?? "<unknown URL>")")
-                completion(nil, "No response from POST request for \(url?.absoluteString ?? "<unknown URL>")")
+                completion(nil, nil, "No response from POST request for \(url?.absoluteString ?? "<unknown URL>")")
                 return
             }
 
@@ -102,9 +96,11 @@ class RoomTokenManager {
                     if let data = results.data,
                        let jsonDictionary = try? JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any?>,
                        let room = jsonDictionary["room"] as? Dictionary<String, Any?>,
-                       let token = room["token"] as? String {
+                       let token = room["token"] as? String,
+                       let domain = jsonDictionary["domain"] as? String {
+                        Logger.debug(self.logTag, "Token for room = \(roomName) domain = \(domain) token = \(token) ")
 
-                        completion(token, nil)
+                        completion(domain, token, nil)
                         return
                     } else {
                         Logger.debug(self.logTag, "token not found for room = \(roomName), httpStatusCode = \(results.response?.httpStatusCode ?? 0)")
@@ -121,7 +117,7 @@ class RoomTokenManager {
                     Logger.debug(self.logTag, "Unexpected response from POST request for \(url?.absoluteString ?? "<unknown URL>") httpStatusCode: \(response.httpStatusCode)")
                     error = "Unexpected response from POST request"
             }
-            completion(nil, error)
+            completion(nil, nil, error)
         }
     }
 

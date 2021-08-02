@@ -265,9 +265,9 @@
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="5eA-tH-7Io" firstAttribute="leading" secondItem="PUA-WX-uf1" secondAttribute="leading" constant="16" id="19C-dx-3dC"/>
-                            <constraint firstItem="PUA-WX-uf1" firstAttribute="trailing" secondItem="Mly-LJ-Mjh" secondAttribute="trailing" id="Jx6-NU-bND"/>
-                            <constraint firstItem="Mly-LJ-Mjh" firstAttribute="top" secondItem="PUA-WX-uf1" secondAttribute="top" constant="30" id="PN7-Nn-qgN"/>
+                            <constraint firstItem="Mly-LJ-Mjh" firstAttribute="trailing" secondItem="PUA-WX-uf1" secondAttribute="trailing" id="9gI-oX-BMt"/>
                             <constraint firstItem="PUA-WX-uf1" firstAttribute="bottom" secondItem="5eA-tH-7Io" secondAttribute="bottom" constant="20" id="Rhm-Cg-MQ2"/>
+                            <constraint firstItem="Mly-LJ-Mjh" firstAttribute="top" secondItem="PUA-WX-uf1" secondAttribute="top" constant="30" id="qVZ-BU-ido"/>
                             <constraint firstItem="PUA-WX-uf1" firstAttribute="bottom" secondItem="zNT-mt-fxx" secondAttribute="bottom" constant="27" id="ts8-2p-jbI"/>
                             <constraint firstItem="5eA-tH-7Io" firstAttribute="top" secondItem="PUA-WX-uf1" secondAttribute="top" constant="20" id="vqL-Dt-coL"/>
                             <constraint firstItem="zNT-mt-fxx" firstAttribute="centerX" secondItem="tOS-IW-str" secondAttribute="centerX" id="zKk-KV-kLg"/>
@@ -278,6 +278,8 @@
                     <connections>
                         <outlet property="controlButtonsStack" destination="zNT-mt-fxx" id="gUE-e0-514"/>
                         <outlet property="leaveRoom" destination="250-hB-izw" id="hXk-cl-dvy"/>
+                        <outlet property="localVideoTopConstraint" destination="qVZ-BU-ido" id="XY6-JE-QsD"/>
+                        <outlet property="localVideoTrailingConstraint" destination="9gI-oX-BMt" id="fVC-Mt-0mo"/>
                         <outlet property="localVideoView" destination="Mly-LJ-Mjh" id="fgd-QI-MXs"/>
                         <outlet property="microphone" destination="HZM-7e-eeG" id="qDS-sa-Tn7"/>
                         <outlet property="participantStackView" destination="5eA-tH-7Io" id="rZL-ui-pLN"/>

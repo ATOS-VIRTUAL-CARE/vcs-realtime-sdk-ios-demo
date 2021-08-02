@@ -11,9 +11,8 @@ import UIKit
 
 class RealtimeSDKManager {
 
-    let realtimeServer = "demo.virtualcareservices.net"
-
     var sdk: RealtimeSDK?
+    var countryCode = "US"
     var logger = Logger()
 
     private(set) var room: Room?
@@ -34,13 +33,13 @@ class RealtimeSDKManager {
         sdk?.subscribeLogEvents(delegate: logger, severity: logSeverity)
     }
 
-    func joinRoom(_ token: String, _ name: String, _ audio: Bool, _ video: Bool) {
+    func joinRoom(_ domain: String, _ token: String, _ name: String, _ audio: Bool, _ video: Bool) {
 
-        var options = RealtimeSDK.RoomOptions(host: realtimeServer, name: name)
+        var options = RealtimeSDK.RoomOptions(host: domain, name: name)
         options.audio = audio
         options.video = video
         options.hdVideo = video && SettingsTableViewController.isSet(.hdVideo)
-        options.participantInfo = ["age" : 18]
+        options.participantInfo = ["country": countryCode]
 
         sdk?.advanced.monitorCallQuality = SettingsTableViewController.isSet(.monitorQoS)
 

@@ -24,6 +24,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var sdkVersion: UILabel!
 
     var token: String?
+    var domain: String?
     var mediaType: String?
 
     var logTag = "MainView"
@@ -71,7 +72,7 @@ class ViewController: UIViewController {
         self.view.endEditing(true)
 
         activityIndicator.startAnimating()
-        tokenManager.createRoomToken(roomName) { (token, errorMessage) in
+        tokenManager.createRoomToken(roomName) { (domain, token, errorMessage) in
             DispatchQueue.main.async {
                 self.activityIndicator.stopAnimating()
             }
@@ -90,6 +91,7 @@ class ViewController: UIViewController {
             }
 
             self.token = token
+            self.domain = domain
 
             Logger.debug(self.logTag, "Created room= \(roomName) with token= \(token)")
             DispatchQueue.main.async {
@@ -108,7 +110,7 @@ class ViewController: UIViewController {
 
         activityIndicator.startAnimating()
         Logger.debug(logTag, "Fetching token for room \(roomName)")
-        tokenManager.getRoomToken(roomName) { (token, httpStatusCode) in
+        tokenManager.getRoomToken(roomName) { (domain, token, httpStatusCode) in
 
             DispatchQueue.main.async {
                 self.activityIndicator.stopAnimating()
@@ -132,6 +134,7 @@ class ViewController: UIViewController {
             }
 
             self.token = token
+            self.domain = domain
 
             Logger.debug(self.logTag, "Joining room= \(roomName) with token= \(token)")
             DispatchQueue.main.async {
@@ -172,11 +175,13 @@ class ViewController: UIViewController {
         if segue.identifier == "showCallView",
             let roomVC = segue.destination as? RoomViewController {
             roomVC.token = token
+            roomVC.domain = domain
             if let userName = yourName.text, userName.isEmpty {
                 yourName.text = randomUserName()
             }
             roomVC.name = yourName.text
             roomVC.roomName = roomName.text
+            roomVC.countryCode = countryCode(yourCountry.text)
             RoomParticipantManager.resetParticipantList()
 
             if let media = self.joinWithMedia.titleForSegment(at: self.joinWithMedia.selectedSegmentIndex) {
@@ -196,6 +201,21 @@ class ViewController: UIViewController {
         let letters = "abcdefghijklmnopqrstuvwxyz0123456789"
         let length = 4
         return "user \(String((0..<length).map{ _ in letters.randomElement()! }))"
+    }
+
+    private func countryCode(_ fullCountryName : String?) -> String {
+        if let fullCountryName = fullCountryName, !fullCountryName.isEmpty {
+            for localeCode in NSLocale.isoCountryCodes {
+                let identifier = NSLocale(localeIdentifier: localeCode)
+                let countryName = identifier.displayName(forKey: NSLocale.Key.countryCode, value: localeCode)
+                if fullCountryName.lowercased() == countryName?.lowercased() {
+                    return localeCode
+                }
+            }
+            Logger.debug(logTag, "Country name= \(fullCountryName) is not found in NSLocale. A random country code will be picked")
+
+        }
+        return NSLocale.isoCountryCodes.randomElement() ?? "US"
     }
 }
 

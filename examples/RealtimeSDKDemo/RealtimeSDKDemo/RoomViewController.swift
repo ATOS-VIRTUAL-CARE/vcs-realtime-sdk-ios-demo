@@ -19,10 +19,14 @@ class RoomViewController: UIViewController {
     @IBOutlet weak var roomLabel: UILabel!
     @IBOutlet weak var controlButtonsStack: UIStackView!
     @IBOutlet weak var participantStackView: UIStackView!
+    @IBOutlet weak var localVideoTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var localVideoTrailingConstraint: NSLayoutConstraint!
 
     var token: String?
+    var domain: String?
     var name: String?
     var roomName: String?
+    var countryCode: String = ""
     var audioMedia: Bool = false
     var videoMedia: Bool = false
 
@@ -72,12 +76,14 @@ class RoomViewController: UIViewController {
         realtimeSDK.onParticipantLeft = onParticipantLeft(participant:)
         realtimeSDK.onConnectionRejected = onConnectionRejected
 
-        if let token = token {
+        if let token = token,
+           let domain = domain {
             if let roomName = roomName {
                 roomLabel.text = "Room: " + roomName
             }
             videoEnabled = videoMedia
-            realtimeSDK.joinRoom(token, name ?? "", audioMedia, videoMedia)
+            realtimeSDK.countryCode = countryCode
+            realtimeSDK.joinRoom(domain, token, name ?? "", audioMedia, videoMedia)
         }
     }
 
@@ -282,6 +288,12 @@ extension RoomViewController {
             gestureRecognizer.view!.center = CGPoint(x: gestureRecognizer.view!.center.x + translation.x, y: gestureRecognizer.view!.center.y + translation.y)
 
             gestureRecognizer.setTranslation(CGPoint.zero, in: self.view)
+
+        } else if gestureRecognizer.state == .ended {
+
+            let screenWidth = UIScreen.main.bounds.size.width
+            localVideoTopConstraint.constant = localVideoView.frame.origin.y - (UIApplication.shared.keyWindow?.safeAreaInsets.top ?? 0)
+            localVideoTrailingConstraint.constant = -(screenWidth - (localVideoView.frame.origin.x + localVideoView.frame.width))
         }
     }
 
