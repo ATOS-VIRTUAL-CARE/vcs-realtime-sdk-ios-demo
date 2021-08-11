@@ -39,6 +39,9 @@ https://github.com/ATOS-VIRTUAL-CARE/webrtc-ios
 ```html
 https://github.com/ATOS-VIRTUAL-CARE/apollo-ios
 ```
+Specify an exact version of 0.44.1 for the apollo-ios package.
+
+<img width="443" alt="Screen Shot 2021-08-10 at 8 25 56 PM" src="https://user-images.githubusercontent.com/5943844/128951596-3d54da7e-4e72-4d36-9246-5c8c23bfe15a.png">
 
 When the Apollo package is imported, only select the following package products:
 
