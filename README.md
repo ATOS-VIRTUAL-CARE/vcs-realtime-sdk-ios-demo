@@ -50,12 +50,12 @@ When the Apollo package is imported, only select the following package products:
 > * ApolloWebSocket
 
 - In the RealtimeSDKDemo target, change the Team and Bundle Identifier to the appropriate values for your development environment.
-- If necessary, change the server addresses for your specific deployment in the RealtimeSDKSettings.swift file. The demo application is already configured with the server at [VCS realtime SDK Demo](https://sdk-demo.virtualcareservices.net/), as shown below.
+- Change the server address for your specific deployment in the RealtimeSDKSettings.swift file.
 ```swift
 class RealtimeSDKSettings {
 
     /// Application server provides room tokens and VCS domain name based on "Room name"  &  API key
-    static let applicationServer =  "sdk-demo.virtualcareservices.net"
+    static let applicationServer =  "<server address>"
 }
 ```
 
@@ -73,7 +73,8 @@ Once the application is running, do the following:
 
 ### More Information
 
-Where to find more information about the VCS Realtime SDKs and APIs.
+Where to find more information about the VCS Realtime 
+s and APIs.
 
 * For more information on the VCS SDK family, see the [VCS realtime SDK page](https://sdk.virtualcareservices.net/)
 * For more information on the VCS iOS SDK, see the [guide for iOS realtime SDK](https://sdk.virtualcareservices.net/sdks/ios)
