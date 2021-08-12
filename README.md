@@ -50,7 +50,7 @@ When the Apollo package is imported, only select the following package products:
 > * ApolloWebSocket
 
 - In the RealtimeSDKDemo target, change the Team and Bundle Identifier to the appropriate values for your development environment.
-- Change the server address for your specific deployment in the RealtimeSDKSettings.swift file.
+- Change the server address for your specific deployment in the RealtimeSDKSettings.swift file. If you are running the sample app locally, see the following link for more information about how to access the application: [Running the app locally](https://github.com/ATOS-VIRTUAL-CARE/vcs-realtime-sdk-web-demo/blob/9b1867c36e169db25e85454829fd03aed0391c33/README.md#running-the-app-locally).
 ```swift
 class RealtimeSDKSettings {
 
