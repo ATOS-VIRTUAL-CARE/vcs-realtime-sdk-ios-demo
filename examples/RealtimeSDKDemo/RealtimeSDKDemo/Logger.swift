@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 import VcsRealtimeSdk
 
 class Logger {
@@ -36,10 +37,51 @@ class Logger {
         return String(threadString[1])
     }
 
+    static func logDeviceInformation() -> String {
+        var output = String()
+
+        output = output.appending("\n")
+        output = output.appending("Device Information\n")
+        output = output.appending("------------------\n")
+        output = output.appending("App Version:   \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") ?? "")")
+        output = output.appending("\n")
+        output = output.appending("SDK Version:   \(RealtimeSDK.version)\n")
+        output = output.appending("OS Version:    \(UIDevice.current.systemVersion)\n")
+        output = output.appending("Model name:    \(UIDevice.current.model)\n")
+        output = output.appending("Model ID:      \(UIDevice.current.modelName)\n")
+        output = output.appending("Battery Level: ")
+        UIDevice.current.isBatteryMonitoringEnabled = true
+        var batteryLevel = UIDevice.current.batteryLevel
+        UIDevice.current.isBatteryMonitoringEnabled = false
+        if (batteryLevel < 0.0) {
+            // -1.0 means battery state is UIDeviceBatteryStateUnknown
+            output = output.appending("Unknown")
+        } else {
+            batteryLevel = batteryLevel * 100
+            let battery = String(format: "%0.0f\n", batteryLevel)
+            output = output.appending(battery)
+        }
+
+        return output
+    }
+
 }
 
 extension Logger: RealtimeSDKLogProtocol {
     func logEvent(message: String) {
         print(message)
+    }
+}
+
+extension UIDevice {
+    var modelName: String {
+        var systemInfo = utsname()
+        uname(&systemInfo)
+        let machineMirror = Mirror(reflecting: systemInfo.machine)
+        let identifier = machineMirror.children.reduce("") { identifier, element in
+            guard let value = element.value as? Int8, value != 0 else { return identifier }
+            return identifier + String(UnicodeScalar(UInt8(value)))
+        }
+        return identifier
     }
 }

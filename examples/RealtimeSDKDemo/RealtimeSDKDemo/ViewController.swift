@@ -34,6 +34,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        Logger.debug(logTag, Logger.logDeviceInformation())
+
         appVersion.text = "App Version: \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") ?? "")"
         sdkVersion.text = "SDK Version: \(RealtimeSDK.version)"
 
