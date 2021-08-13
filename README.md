@@ -36,19 +36,6 @@ https://github.com/ATOS-VIRTUAL-CARE/vcs-realtime-sdk-ios
 https://github.com/ATOS-VIRTUAL-CARE/webrtc-ios
 ```
 
-```html
-https://github.com/ATOS-VIRTUAL-CARE/apollo-ios
-```
-Specify an exact version of 0.44.1 for the apollo-ios package.
-
-<img width="443" alt="Screen Shot 2021-08-10 at 8 25 56 PM" src="https://user-images.githubusercontent.com/5943844/128951596-3d54da7e-4e72-4d36-9246-5c8c23bfe15a.png">
-
-When the Apollo package is imported, only select the following package products:
-
-> * Apollo
-> * ApolloAPI
-> * ApolloWebSocket
-
 - In the RealtimeSDKDemo target, change the Team and Bundle Identifier to the appropriate values for your development environment.
 - Change the server address for your specific deployment in the RealtimeSDKSettings.swift file. If you are running the sample app locally, see the following link for more information about how to access the application: [Running the app locally](https://github.com/ATOS-VIRTUAL-CARE/vcs-realtime-sdk-web-demo/blob/9b1867c36e169db25e85454829fd03aed0391c33/README.md#running-the-app-locally).
 ```swift
