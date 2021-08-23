@@ -10,5 +10,7 @@ import Foundation
 class RealtimeSDKSettings {
 
     /// Application server provides room tokens and VCS domain name based on "Room name"  &  API key
-    static let applicationServer =  "<server name>"
+    static let applicationServer = "sdk-snapshot.virtualcareservices.net"
+    static let serverUsername = "<username>"
+    static let serverPassword = "<password>"
 }

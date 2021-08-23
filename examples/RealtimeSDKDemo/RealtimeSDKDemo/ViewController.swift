@@ -59,6 +59,18 @@ class ViewController: UIViewController {
             activityIndicator.style = UIActivityIndicatorView.Style.whiteLarge
         }
 
+        // Get the initial config from the server. This provides the server for the
+        // websocket connection and whether the server supports authentication.
+        tokenManager.getConfig() { (server, auth, error) in
+            guard let _ = server else {
+                Logger.debug(self.logTag, "Error retrieving config from server")
+                return
+            }
+            if let server = server, let auth = auth {
+                Logger.debug(self.logTag, "Retrieved config from server: server = \(server), auth = \(auth)")
+            }
+        }
+
         Logger.debug(logTag, "RealtimeSDKDemo application initialized")
     }
 
