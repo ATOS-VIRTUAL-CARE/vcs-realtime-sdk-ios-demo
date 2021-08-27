@@ -60,7 +60,6 @@ class RealtimeSDKSettings {
     static let serverPassword = ""
 }
 ```
-- It is also possible to set the server address and user credentials through the Settings page of the demo app.
 
 ### Build and Run
 
