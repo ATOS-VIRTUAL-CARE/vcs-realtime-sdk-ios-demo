@@ -226,10 +226,11 @@ class ViewController: UIViewController {
                     return localeCode
                 }
             }
-            Logger.debug(logTag, "Country name= \(fullCountryName) is not found in NSLocale. A random country code will be picked")
-
+            // The user may have entered the local code itself e.g., 'US' and expects to see the american flag
+            Logger.debug(logTag, "Country name= \(fullCountryName) is not found in NSLocale. Just return entered text")
         }
-        return NSLocale.isoCountryCodes.randomElement() ?? "US"
+        // Only attempt to have a flag shown if the user entered something
+        return fullCountryName ?? ""
     }
 }
 

@@ -16,6 +16,7 @@ class SettingsTableViewController: UITableViewController {
         case debugLogging = "Enable debug logs"
         case monitorQoS = "Monitor call quality"
         case scaleDownVideo = "Scale down video resolution"
+        case onlyRelayICECandidates = "Allow only Relay ICE candidates"
         case preferredCodec = "Preferred video codec"
     }
 
@@ -81,6 +82,8 @@ class SettingsTableViewController: UITableViewController {
                 Logger.debug(logTag, "Debug logging is now \(isOn ? "ON" : "OFF")")
             case .monitorQoS:
                 Logger.debug(logTag, "QoS monitoring is now \(isOn ? "ON" : "OFF")")
+            case .onlyRelayICECandidates:
+                Logger.debug(logTag, "Allow only Relay ICE candidates is now \(isOn ? "ON" : "OFF")")
             case .preferredCodec:
                 Logger.debug(logTag, "unexpected event")
             case .scaleDownVideo:

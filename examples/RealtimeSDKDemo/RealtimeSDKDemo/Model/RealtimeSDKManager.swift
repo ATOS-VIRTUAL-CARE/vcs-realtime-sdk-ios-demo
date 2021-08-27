@@ -42,6 +42,7 @@ class RealtimeSDKManager {
         options.participantInfo = ["country": countryCode]
 
         sdk?.advanced.monitorCallQuality = SettingsTableViewController.isSet(.monitorQoS)
+        sdk?.advanced.onlyRelayICECandidates = SettingsTableViewController.isSet(.onlyRelayICECandidates)
 
         sdk?.joinRoom(token: token, options: options) { error in
             if let error = error {
