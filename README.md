@@ -55,11 +55,12 @@ When the Apollo package is imported, only select the following package products:
 class RealtimeSDKSettings {
 
     /// Application server provides room tokens and VCS domain name based on "Room name"  &  API key
-    static let applicationServer =  "<server address>"
-    static let serverUsername = "<username>"
-    static let serverPassword = "<password>"
+    static let applicationServer = ""
+    static let serverUsername = ""
+    static let serverPassword = ""
 }
 ```
+- It is also possible to set the server address and user credentials through the Settings page of the demo app.
 
 ### Build and Run
 
