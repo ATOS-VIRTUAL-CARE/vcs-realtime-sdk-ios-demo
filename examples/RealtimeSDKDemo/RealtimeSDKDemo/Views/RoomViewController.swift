@@ -60,6 +60,10 @@ class RoomViewController: UIViewController {
         microphone.isEnabled = false
         #endif
 
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            speaker.isSelected = true
+        }
+
         // Add a tap gesture recognizer
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleTap)))
 
@@ -118,6 +122,10 @@ class RoomViewController: UIViewController {
     }
 
     @IBAction func speaker(_ sender: Any) {
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return
+        }
 
         speakerStatus = !speakerStatus
 

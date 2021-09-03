@@ -21,7 +21,7 @@ class RoomTokenManager {
             return
         }
 
-        let url = URL(string: "https://\(RealtimeSDKSettings.applicationServer)/api/room")
+        let url = URL(string: "https://\(RealtimeSDKSettings.server)/api/room")
         let rest = RestManager()
         rest.requestHttpHeaders.add(value: "application/json", forKey: "Content-Type")
         rest.requestHttpHeaders.add(value: "*/*", forKey: "accept")
@@ -67,7 +67,7 @@ class RoomTokenManager {
 
     func getConfig(completion: @escaping (String?, String?, Int) -> Void) {
 
-        let url = URL(string: "https://\(RealtimeSDKSettings.applicationServer)/api/config")
+        let url = URL(string: "https://\(RealtimeSDKSettings.server)/api/config")
         let rest = RestManager()
         rest.requestHttpHeaders.add(value: "application/json", forKey: "Content-Type")
         rest.requestHttpHeaders.add(value: "*/*", forKey: "accept")
@@ -121,12 +121,12 @@ class RoomTokenManager {
             return
         }
 
-        let url = URL(string: "https://\(RealtimeSDKSettings.applicationServer)/api/room")
+        let url = URL(string: "https://\(RealtimeSDKSettings.server)/api/room")
         let rest = RestManager()
         rest.requestHttpHeaders.add(value: "application/json", forKey: "Content-Type")
         rest.requestHttpHeaders.add(value: "*/*", forKey: "accept")
         if self.authorizationRequired {
-            let authorization = "\(RealtimeSDKSettings.serverUsername):\(RealtimeSDKSettings.serverPassword)".data(using: .utf8)
+            let authorization = "\(RealtimeSDKSettings.user):\(RealtimeSDKSettings.password)".data(using: .utf8)
             if let encodedAuthorization = authorization?.base64EncodedString() {
                 rest.requestHttpHeaders.add(value: "Basic \(encodedAuthorization)", forKey: "authorization")
                 Logger.debug(logTag, "Including encoded authorization header")
@@ -162,6 +162,14 @@ class RoomTokenManager {
                     } else {
                         Logger.debug(self.logTag, "token not found for room = \(roomName), httpStatusCode = \(results.response?.httpStatusCode ?? 0)")
                     }
+                case 401:
+                    if let data = results.data, let errorText = String(data: data, encoding: .utf8), !errorText.isEmpty {
+                        Logger.debug(self.logTag, "401 response for \(url?.absoluteString ?? "<unknown URL>")")
+                        error = errorText
+                    } else {
+                        Logger.debug(self.logTag, "401 response, invalid credentials")
+                        error = "Invalid credentials. Please check username and password in the Settings."
+                    }
                 case 409:
                     if let data = results.data, let errorText = String(data: data, encoding: .utf8) {
                         Logger.debug(self.logTag, "Unexpected response from POST request for \(url?.absoluteString ?? "<unknown URL>") httpStatusCode: \(response.httpStatusCode) error: \(errorText)")
@@ -170,6 +178,7 @@ class RoomTokenManager {
                         Logger.debug(self.logTag, "Unexpected 409 response from POST request for \(url?.absoluteString ?? "<unknown URL>") httpStatusCode: \(response.httpStatusCode)")
                         error = "Unexpected 409 response from POST request"
                     }
+
                 default:
                     Logger.debug(self.logTag, "Unexpected response from POST request for \(url?.absoluteString ?? "<unknown URL>") httpStatusCode: \(response.httpStatusCode)")
                     error = "Unexpected response from POST request"

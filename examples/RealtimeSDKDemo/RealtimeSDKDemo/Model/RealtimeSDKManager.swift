@@ -33,6 +33,14 @@ class RealtimeSDKManager {
         sdk?.subscribeLogEvents(delegate: logger, severity: logSeverity)
     }
 
+    func dismiss() {
+        onRoomJoined = nil
+        onRoomInitFailure = nil
+        onParticipantJoined = nil
+        onParticipantLeft = nil
+        onConnectionRejected = nil
+    }
+
     func joinRoom(_ domain: String, _ token: String, _ name: String, _ audio: Bool, _ video: Bool) {
 
         var options = RealtimeSDK.RoomOptions(host: domain, name: name)
@@ -43,6 +51,7 @@ class RealtimeSDKManager {
 
         sdk?.advanced.monitorCallQuality = SettingsTableViewController.isSet(.monitorQoS)
         sdk?.advanced.onlyRelayICECandidates = SettingsTableViewController.isSet(.onlyRelayICECandidates)
+        sdk?.advanced.preferredVideoCodec = SettingsTableViewController.isPreferredCodecVP9() ? .vp9 : .vp8
 
         sdk?.joinRoom(token: token, options: options) { error in
             if let error = error {
@@ -144,6 +153,8 @@ extension RealtimeSDKManager: RealtimeSDKProtocol {
         self.room = nil
 
         RoomParticipantManager.resetParticipantList()
+
+        dismiss()
     }
 
     func onParticipantJoined(room: Room, participant: RemoteParticipant) {

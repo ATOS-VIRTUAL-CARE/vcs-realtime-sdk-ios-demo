@@ -34,6 +34,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.roomName.delegate = self
+        self.yourName.delegate = self
+        self.yourCountry.delegate = self
+
         Logger.debug(logTag, Logger.logDeviceInformation())
 
         appVersion.text = "App Version: \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") ?? "")"
@@ -234,3 +238,9 @@ class ViewController: UIViewController {
     }
 }
 
+extension ViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+}

@@ -104,16 +104,14 @@
 			isa = PBXGroup;
 			children = (
 				E9A9FC43260D021A00486000 /* AppDelegate.swift */,
-				E9A9FC4E260D021C00486000 /* LaunchScreen.storyboard */,
-				E9A9FC49260D021A00486000 /* Main.storyboard */,
-				37D4124926126B0400280974 /* RoomViewController.swift */,
-				E9A9FC45260D021A00486000 /* SceneDelegate.swift */,
-				E9CA98A1268E28160031ADC1 /* SettingsTableViewController.swift */,
-				E9A9FC47260D021A00486000 /* ViewController.swift */,
 				E9A9FC4C260D021C00486000 /* Assets.xcassets */,
 				E9A9FC51260D021C00486000 /* Info.plist */,
-				E96BCCD52617F5F90009FC3D /* Model */,
+				E9A9FC4E260D021C00486000 /* LaunchScreen.storyboard */,
 				370E023C26399EE900ECF892 /* Logger.swift */,
+				E9A9FC49260D021A00486000 /* Main.storyboard */,
+				E9A9FC45260D021A00486000 /* SceneDelegate.swift */,
+				E96BCCD52617F5F90009FC3D /* Model */,
+				E9D1A39F26D95536004B6B58 /* Views */,
 			);
 			path = RealtimeSDKDemo;
 			sourceTree = "<group>";
@@ -124,6 +122,16 @@
 				E994B14C2698C17F00323FF6 /* VcsRealtimeSdk.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E9D1A39F26D95536004B6B58 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				37D4124926126B0400280974 /* RoomViewController.swift */,
+				E9CA98A1268E28160031ADC1 /* SettingsTableViewController.swift */,
+				E9A9FC47260D021A00486000 /* ViewController.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -362,7 +370,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.5.2;
+				MARKETING_VERSION = 0.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.unify.RealtimeSDKDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -383,7 +391,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.5.2;
+				MARKETING_VERSION = 0.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.unify.RealtimeSDKDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
