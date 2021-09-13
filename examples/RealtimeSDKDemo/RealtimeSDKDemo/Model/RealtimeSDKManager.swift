@@ -43,15 +43,14 @@ class RealtimeSDKManager {
 
     func joinRoom(_ domain: String, _ token: String, _ name: String, _ audio: Bool, _ video: Bool) {
 
+        sdk?.advanced.monitorCallQuality = SettingsTableViewController.isSet(.monitorQoS)
+        sdk?.advanced.preferredVideoCodec = SettingsTableViewController.isPreferredCodecVP9() ? .vp9 : .vp8
+
         var options = RealtimeSDK.RoomOptions(host: domain, name: name)
         options.audio = audio
         options.video = video
         options.hdVideo = video && SettingsTableViewController.isSet(.hdVideo)
         options.participantInfo = ["country": countryCode]
-
-        sdk?.advanced.monitorCallQuality = SettingsTableViewController.isSet(.monitorQoS)
-        sdk?.advanced.onlyRelayICECandidates = SettingsTableViewController.isSet(.onlyRelayICECandidates)
-        sdk?.advanced.preferredVideoCodec = SettingsTableViewController.isPreferredCodecVP9() ? .vp9 : .vp8
 
         sdk?.joinRoom(token: token, options: options) { error in
             if let error = error {
