@@ -79,6 +79,7 @@ class RoomViewController: UIViewController {
         realtimeSDK.onParticipantJoined = onParticipantJoined(participant:)
         realtimeSDK.onParticipantLeft = onParticipantLeft(participant:)
         realtimeSDK.onConnectionRejected = onConnectionRejected
+        realtimeSDK.onLocalStreamUpdated = onLocalStreamUpdated
 
         if let token = token,
            let domain = domain {
@@ -249,6 +250,17 @@ extension RoomViewController {
             }))
             self.present(alert, animated: true, completion: nil)
         }
+    }
+
+    func onLocalStreamUpdated(videoEnabled: Bool) {
+        Logger.debug(logTag, "onLocalStreamUpdated - video \(videoEnabled ? "enabled" : "disabled")")
+        self.videoEnabled = videoEnabled
+        if videoEnabled {
+            DispatchQueue.main.async {
+                self.realtimeSDK.setLocalVideoView(self.localVideoView)
+            }
+        }
+        showLocalVideo(show: videoEnabled)
     }
 
     @objc func handlePan(_ gestureRecognizer: UIPanGestureRecognizer) {

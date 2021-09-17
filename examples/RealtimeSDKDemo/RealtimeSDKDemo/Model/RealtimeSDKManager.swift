@@ -25,6 +25,7 @@ class RealtimeSDKManager {
     var onParticipantJoined: ((RemoteParticipant) -> Void)?
     var onParticipantLeft: ((RemoteParticipant) -> Void)?
     var onConnectionRejected: (() -> Void)?
+    var onLocalStreamUpdated: ((Bool) -> Void)?
 
     func initialize() {
         sdk = RealtimeSDK(delegate: self)
@@ -39,6 +40,7 @@ class RealtimeSDKManager {
         onParticipantJoined = nil
         onParticipantLeft = nil
         onConnectionRejected = nil
+        onLocalStreamUpdated = nil
     }
 
     func joinRoom(_ domain: String, _ token: String, _ name: String, _ audio: Bool, _ video: Bool) {
@@ -182,6 +184,7 @@ extension RealtimeSDKManager: RealtimeSDKProtocol {
 
     func onLocalStreamUpdated(room: Room, participant: LocalParticipant) {
         Logger.debug(logTag, "LocalStream  \(participant.stream ?? "") updated")
+        self.onLocalStreamUpdated?(room.hasVideo())
     }
 
     func onRemoteStreamUpdated(room: Room, participant: RemoteParticipant) {
