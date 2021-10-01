@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import VcsRealtimeSdk
 
 class SettingsTableViewController: UITableViewController, UITextFieldDelegate {
 
@@ -53,15 +54,20 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate {
                 switchView.setOn(savedValue, animated: true)
                 switchView.tag = indexPath.row
                 switchView.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
+                if text == .hdVideo,
+                   !DeviceCapabilities.hdVideo() {
+                    switchView.setOn(false, animated: true)
+                    switchView.isEnabled = false
+                }
                 cell.accessoryView = switchView
 
             case .preferredCodec:
-                let codecTypes = ["VP8", "VP9"]
+                let codecTypes = DeviceCapabilities.videoCodecs()
                 let segmentedControl = UISegmentedControl(items: codecTypes)
-                let savedCodecType = SettingsTableViewController.isPreferredCodecVP9()
-                segmentedControl.selectedSegmentIndex = savedCodecType ? 1 : 0
+                let savedCodecType = codecTypes.firstIndex(of: SettingsTableViewController.preferredVideoCodec ?? "") ?? 0
+                segmentedControl.selectedSegmentIndex = savedCodecType
 
-                segmentedControl.frame = CGRect(x: 35, y: 200, width: 100, height: 30)
+                segmentedControl.frame = CGRect(x: 35, y: 200, width: 140, height: 30)
                 segmentedControl.addTarget(self, action: #selector(prefferedCodecSelected(_:)), for: .valueChanged)
 
                 if #available(iOS 13.0, *) {
@@ -134,17 +140,10 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate {
     }
 
     @objc func prefferedCodecSelected(_ segmentedControl: UISegmentedControl) {
-        var codecType = "VP9"
-        switch (segmentedControl.selectedSegmentIndex) {
-        case 0:
-            Logger.debug(logTag, "VP8 Codec selected")
-            codecType = "VP8"
-        case 1:
-            Logger.debug(logTag, "VP9 Codec selected")
-        default:
-            break
-        }
-        UserDefaults.standard.setValue(codecType, forKey: "RealtimeSDKDemo_\(SettingType.preferredCodec.rawValue)")
+        let codecType = segmentedControl.titleForSegment(at: segmentedControl.selectedSegmentIndex) ?? "VP9"
+        Logger.debug(logTag, "\(codecType) Codec selected")
+
+        SettingsTableViewController.preferredVideoCodec = codecType
     }
 
     static func isSet(_ type: SettingType) -> Bool {
@@ -155,13 +154,14 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate {
         return isFlagSet ?? false
     }
 
-    static func isPreferredCodecVP9() -> Bool {
-        if let codeType = UserDefaults.standard.object(forKey: "RealtimeSDKDemo_\(SettingType.preferredCodec.rawValue)") as? String {
-            return codeType == "VP9"
+    static var preferredVideoCodec: String? {
+        get {
+            return UserDefaults.standard.object(forKey: "RealtimeSDKDemo_\(SettingType.preferredCodec.rawValue)") as? String
         }
 
-        // VP9 is the default codec 
-        return true
+        set {
+            UserDefaults.standard.setValue(newValue, forKey: "RealtimeSDKDemo_\(SettingType.preferredCodec.rawValue)")
+        }
     }
 
     // UITextFieldDelegate
