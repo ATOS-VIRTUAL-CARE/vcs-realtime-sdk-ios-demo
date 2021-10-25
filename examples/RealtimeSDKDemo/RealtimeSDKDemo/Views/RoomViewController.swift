@@ -95,7 +95,7 @@ class RoomViewController: UIViewController {
     @IBAction func leaveRoom(_ sender: Any) {
         realtimeSDK.leaveRoom()
 
-        self.view.window!.rootViewController?.dismiss(animated:false, completion: nil)
+        self.view.window?.rootViewController?.dismiss(animated:false, completion: nil)
     }
 
     @IBAction func mute(_ sender: Any) {
@@ -214,7 +214,7 @@ extension RoomViewController {
             let alert = UIAlertController(title: "Error Joining Room", message: "Can't join room \"\(self.roomName ?? "")\".", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
                 Logger.debug(self.logTag, "The \"OK\" alert occurred.")
-                self.view.window!.rootViewController?.dismiss(animated:false, completion: nil)
+                self.view.window?.rootViewController?.dismiss(animated:false, completion: nil)
             }))
             self.present(alert, animated: true, completion: nil)
         }
@@ -246,7 +246,7 @@ extension RoomViewController {
             let alert = UIAlertController(title: "Connection Rejected", message: "Could not connect to room.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
                 Logger.debug(self.logTag, "The \"OK\" alert occurred.")
-                self.view.window!.rootViewController?.dismiss(animated:true, completion: nil)
+                self.view.window?.rootViewController?.dismiss(animated:true, completion: nil)
             }))
             self.present(alert, animated: true, completion: nil)
         }
