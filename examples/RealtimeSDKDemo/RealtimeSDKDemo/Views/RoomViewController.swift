@@ -57,7 +57,6 @@ class RoomViewController: UIViewController {
         leaveRoom.setBackgroundImage(UIImage(named: "hangup"), for: .normal)
         #if !arch(arm64)
         video.isEnabled = false
-        microphone.isEnabled = false
         #endif
 
         if UIDevice.current.userInterfaceIdiom == .pad {
