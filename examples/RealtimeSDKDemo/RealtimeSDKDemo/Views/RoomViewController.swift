@@ -79,6 +79,7 @@ class RoomViewController: UIViewController {
         realtimeSDK.onParticipantLeft = onParticipantLeft(participant:)
         realtimeSDK.onConnectionRejected = onConnectionRejected
         realtimeSDK.onLocalStreamUpdated = onLocalStreamUpdated
+        realtimeSDK.onTextMessageReceived = onMessageReceived(name: message:)
 
         if let token = token,
            let domain = domain {
@@ -260,6 +261,14 @@ extension RoomViewController {
             }
         }
         showLocalVideo(show: videoEnabled)
+    }
+
+    func onMessageReceived(name: String, message: String) {
+        let alert = UIAlertController(title: "Message from \(name)", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+            Logger.debug(self.logTag, "The \"OK\" alert occurred.")
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
 
     @objc func handlePan(_ gestureRecognizer: UIPanGestureRecognizer) {

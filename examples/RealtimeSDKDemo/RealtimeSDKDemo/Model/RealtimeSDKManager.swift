@@ -26,6 +26,7 @@ class RealtimeSDKManager {
     var onParticipantLeft: ((RemoteParticipant) -> Void)?
     var onConnectionRejected: (() -> Void)?
     var onLocalStreamUpdated: ((Bool) -> Void)?
+    var onTextMessageReceived: ((String, String) -> Void)?
 
     func initialize() {
         sdk = RealtimeSDK(delegate: self)
@@ -128,10 +129,10 @@ class RealtimeSDKManager {
             }
         }
     }
-
 }
 
 extension RealtimeSDKManager: RealtimeSDKProtocol {
+
     func onRoomInitialized(room: Room) {
         self.room = room
         room.remoteParticipants()?.forEach { participant in
@@ -191,6 +192,19 @@ extension RealtimeSDKManager: RealtimeSDKProtocol {
 
     func onRemoteStreamUpdated(room: Room, participant: RemoteParticipant) {
         Logger.debug(logTag, "RemoteStream video: \(participant.hasVideo() ? "Enabled" : "Disabled")  mediaStrea: \(participant.stream ?? "")  ")
+    }
+
+    func onMessageReceived(address: String, message: Data) {
+        let remoteParticipantName = room?.remoteParticipants()?.filter({ $0.address == address }).first?.name
+
+        onTextMessageReceived?(remoteParticipantName ?? "", String(decoding: message, as: UTF8.self))
+    }
+    func onDataChannelOpen(address: String) {
+        Logger.debug(logTag, "onDataChannelOpen  participant address: \(address)")
+    }
+
+    func onDataChannelClosed(address: String) {
+        Logger.debug(logTag, "onDataChannelClosed  participant address: \(address)")
     }
 }
 

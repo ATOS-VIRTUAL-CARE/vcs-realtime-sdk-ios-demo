@@ -201,6 +201,7 @@ class ViewController: UIViewController {
             roomVC.roomName = roomName.text
             roomVC.countryCode = countryCode(yourCountry.text)
             RoomParticipantManager.resetParticipantList()
+            RoomParticipantManager.realtimeSdkManager = roomVC.realtimeSDK
 
             if let media = self.joinWithMedia.titleForSegment(at: self.joinWithMedia.selectedSegmentIndex) {
                 roomVC.audioMedia = (media != "Video")      // Audio or Audio/Video is selected

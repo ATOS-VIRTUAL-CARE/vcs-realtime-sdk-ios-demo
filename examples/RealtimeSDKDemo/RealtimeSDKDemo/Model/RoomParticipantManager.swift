@@ -19,6 +19,9 @@ class RoomParticipant {
 }
 
 class RoomParticipantManager {
+
+    weak static var realtimeSdkManager: RealtimeSDKManager?
+
     static private(set) var participants: Array<RoomParticipant> = []
 
     static private let logTag = "RoomParticipantManager"
@@ -38,6 +41,16 @@ class RoomParticipantManager {
         ]
         userName.attributedText = NSMutableAttributedString.init(string: participant.name ?? "", attributes: attributes)
         view.addSubview(userName)
+
+
+        let button = UIButton(frame: CGRect(x: 20, y: view.frame.height + 50, width: 40, height: 40))
+        let messageImage = UIImage(named: "message")
+        button.setImage(messageImage, for: .normal)
+        button.addTarget(RoomParticipantManager.self, action: #selector(sendMessage(_:)), for: .touchUpInside)
+        button.accessibilityIdentifier = participant.address
+        print("button.accessibilityIdentifier = \(String(describing: button.accessibilityIdentifier))")
+        view.addSubview(button)
+
 
         view.contentMode = .scaleToFill
         view.layer.borderWidth = 2
@@ -63,4 +76,38 @@ class RoomParticipantManager {
     static func resetParticipantList() {
         participants.removeAll()
     }
+
+    @objc static func sendMessage(_ sender: UIButton!) {
+
+        let message = "Hi, this is test message"
+
+        Logger.debug(logTag, "sender.accessibilityIdentifier = \(String(describing: sender.accessibilityIdentifier)) message: \(message)")
+
+        // Create alert controller to allow user to input message
+        let alert = UIAlertController(title: "Message to Send", message: "Enter text", preferredStyle: .alert)
+        alert.addTextField { (textField) in
+            textField.placeholder = "Message"
+        }
+
+        alert.addAction(UIAlertAction(title: "Send", style: .default, handler: { [weak alert] (_) in
+            guard let textField = alert?.textFields?[0], let userText = textField.text else { return }
+            print("User text: \(userText)")
+
+            let data = textField.text?.data(using: .utf8)
+            realtimeSdkManager?.room?.sendMessageToParticipant(data!, sender.accessibilityIdentifier ?? "")
+        }))
+
+        // Present the alert box to the user
+        topMostViewController().present(alert, animated: true, completion: nil)
+
+    }
+
+    static func topMostViewController() -> UIViewController {
+        var topViewController: UIViewController? = UIApplication.shared.keyWindow?.rootViewController
+        while ((topViewController?.presentedViewController) != nil) {
+            topViewController = topViewController?.presentedViewController
+        }
+        return topViewController!
+    }
+
 }
