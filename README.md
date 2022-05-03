@@ -45,7 +45,7 @@ Once Xcode finds the package, select *Exact Version* for the Dependency Rule and
 ```html
 https://github.com/apollographql/apollo-ios
 ```
-The minimum version should be 0.51.0 for the apollo-ios package.
+
 Once Xcode finds the apollo-ios package, select *Exact Version* for the Dependency Rule and select version 0.51.2.
 
 When the Apollo package is imported, only select the following package products:
