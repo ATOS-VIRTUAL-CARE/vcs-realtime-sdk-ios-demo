@@ -33,34 +33,20 @@ Using Xcode, open the ```RealtimeSDKDemo.xcodeproj``` file in the ```examples/Re
 ```html
 https://github.com/ATOS-VIRTUAL-CARE/vcs-realtime-sdk-ios
 ```
-<details>
-    <summary>Xcode 13 details</summary>
-    
-    For Xcode 13, be aware of the following:
-    
-    - When copying the vcs-realtime-sdk-ios package URL above, make sure there are no trailing spaces, then press enter to search for the package.
-    
-    - Once Xcode finds the package, select Up to Next Major Version for the Dependency Rule to get the latest version of the VCS SDK.
-</details>
+
+Once Xcode finds the package, select *Up to Next Major Version* for the Dependency Rule to get the latest version of the VCS SDK.
 
 ```html
 https://github.com/ATOS-VIRTUAL-CARE/webrtc-ios
 ```
 
-<details>
-    <summary>Xcode 13 details</summary>
-    
-    For Xcode 13, be aware of the following:
-    
-    - When copying the webrtc-ios package URL above, make sure there are no trailing spaces, then press enter to search for the package.
-    
-    - Once Xcode finds the package, select Exact Version for the Dependency Rule and select version 98.0.0.
-</details>
+Once Xcode finds the package, select *Exact Version* for the Dependency Rule and select version 98.0.0.
 
 ```html
 https://github.com/apollographql/apollo-ios
 ```
 The minimum version should be 0.51.0 for the apollo-ios package.
+Once Xcode finds the apollo-ios package, select *Exact Version* for the Dependency Rule and select version 0.51.2.
 
 When the Apollo package is imported, only select the following package products:
 
