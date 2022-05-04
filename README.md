@@ -65,7 +65,7 @@ class RealtimeSDKSettings {
     static let serverPassword = ""
 }
 ```
-It is also possible to enter these values from the demo app's settings screen.
+It is also possible to enter these values from the demo app's settings screen. Include the http or https prefix when specifying the application server either in the RealtimeSDKSettings.swift file or on the settings screen.
 
 ### Build and Run
 
