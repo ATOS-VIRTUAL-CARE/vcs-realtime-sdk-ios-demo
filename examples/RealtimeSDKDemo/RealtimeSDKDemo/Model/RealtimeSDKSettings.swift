@@ -17,7 +17,11 @@ class RealtimeSDKSettings {
     static var server: String {
         get {
             let address = UserDefaults.standard.object(forKey: "RealtimeSDKDemo_\(SettingsTableViewController.SettingType.serverAddress.rawValue)") as? String
-            return address ?? RealtimeSDKSettings.applicationServer
+            if let address = address, address.count > 0 {
+                return address
+            } else {
+                return RealtimeSDKSettings.applicationServer
+            }
         }
 
         set {

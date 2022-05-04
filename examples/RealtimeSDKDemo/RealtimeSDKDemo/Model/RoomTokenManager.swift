@@ -21,7 +21,7 @@ class RoomTokenManager {
             return
         }
 
-        let url = URL(string: "https://\(RealtimeSDKSettings.server)/api/room")
+        let url = URL(string: "\(RealtimeSDKSettings.server)/api/room")
         let rest = RestManager()
         rest.requestHttpHeaders.add(value: "application/json", forKey: "Content-Type")
         rest.requestHttpHeaders.add(value: "*/*", forKey: "accept")
@@ -67,7 +67,7 @@ class RoomTokenManager {
 
     func getConfig(completion: @escaping (String?, String?, Int) -> Void) {
 
-        let url = URL(string: "https://\(RealtimeSDKSettings.server)/api/config")
+        let url = URL(string: "\(RealtimeSDKSettings.server)/api/config")
         let rest = RestManager()
         rest.requestHttpHeaders.add(value: "application/json", forKey: "Content-Type")
         rest.requestHttpHeaders.add(value: "*/*", forKey: "accept")
@@ -121,7 +121,7 @@ class RoomTokenManager {
             return
         }
 
-        let url = URL(string: "https://\(RealtimeSDKSettings.server)/api/room")
+        let url = URL(string: "\(RealtimeSDKSettings.server)/api/room")
         let rest = RestManager()
         rest.requestHttpHeaders.add(value: "application/json", forKey: "Content-Type")
         rest.requestHttpHeaders.add(value: "*/*", forKey: "accept")
