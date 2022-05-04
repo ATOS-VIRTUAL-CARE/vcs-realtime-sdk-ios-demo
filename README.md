@@ -46,7 +46,7 @@ Once Xcode finds the package, select *Exact Version* for the Dependency Rule and
 https://github.com/apollographql/apollo-ios
 ```
 
-Once Xcode finds the apollo-ios package, select *Exact Version* for the Dependency Rule and select version 0.51.2.
+Once Xcode finds the apollo-ios package, select *Up to Next Major Version* for the Dependency Rule and select version 0.51.2.
 
 When the Apollo package is imported, only select the following package products:
 
@@ -66,6 +66,11 @@ class RealtimeSDKSettings {
 }
 ```
 It is also possible to enter these values from the demo app's settings screen. Include the http or https prefix when specifying the application server either in the RealtimeSDKSettings.swift file or on the settings screen.
+
+### Running the application server locally
+
+For development purposes, the demo application server may be run locally to provide access to a test system. See the sample application for web clients [Running application locally](https://github.com/ATOS-VIRTUAL-CARE/vcs-realtime-sdk-web-demo#running-application-locally) for instructions. The application server address to be configured in the mobile client will be the localhost's IP address and the port the application server is listening on. Also, "http://" must prefix the address when not using TLS.
+Example address: http://192.168.1.232:3001
 
 ### Build and Run
 
