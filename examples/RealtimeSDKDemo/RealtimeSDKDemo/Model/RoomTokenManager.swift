@@ -10,7 +10,7 @@ import Foundation
 class RoomTokenManager {
 
     private var restTransactions: [UUID:RestManager]?
-    private let logTag = "RealtimeSDKManager"
+    private let logTag = "RoomTokenManager"
     private var authorizationRequired = false
 
     func getRoomToken(_ roomName: String, completion: @escaping (String?, String?, Int) -> Void) {
@@ -133,7 +133,8 @@ class RoomTokenManager {
             }
         }
 
-        rest.httpBody = "{ \"name\": \"\(roomName)\"}".data(using: .utf8)
+        let httpBody = "{ \"name\": \"\(roomName)\", \"conferenceType\": \"\(SettingsTableViewController.conferenceType)\",  \"autoUpgradeParticipantCount\": \"\(SettingsTableViewController.upgradeOnParticipant)\"}"
+        rest.httpBody = httpBody.data(using: .utf8)
 
         addRestTransaction(rest: rest)
         rest.makeRequest(toURL: url!, withHttpMethod: .post) { (results) in

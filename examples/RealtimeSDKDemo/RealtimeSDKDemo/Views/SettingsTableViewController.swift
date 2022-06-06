@@ -21,6 +21,8 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate {
         case serverAddress = "Server "
         case userName = "User Name "
         case password = "Password "
+        case conferenceType = "Conference Room Type"
+        case upgradeConferenceType = "Upgrade on participant"
     }
 
     override func viewDidLoad() {
@@ -80,7 +82,8 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate {
 
             case .serverAddress,
                  .userName,
-                 .password:
+                 .password,
+                 .upgradeConferenceType:
                 let textField = UITextField()
                 var textFieldValue = UserDefaults.standard.object(forKey: "RealtimeSDKDemo_\(text.rawValue)") as? String ?? ""
                 if textFieldValue.isEmpty {
@@ -91,6 +94,8 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate {
                         defaultValue = RealtimeSDKSettings.user
                     } else if text == .password {
                         defaultValue = RealtimeSDKSettings.password
+                    } else if text == .upgradeConferenceType {
+                        defaultValue = "0"
                     }
                     textFieldValue = defaultValue
                     UserDefaults.standard.setValue(defaultValue, forKey: "RealtimeSDKDemo_\(text.rawValue)")
@@ -103,6 +108,8 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate {
                 } else if text == .password {
                     textField.frame = CGRect(x: 35, y: 200, width: 250, height: 30)
                     textField.isSecureTextEntry = true
+                } else if text == .upgradeConferenceType {
+                    textField.frame = CGRect(x: 35, y: 200, width: 20, height: 30)
                 }
 
                 let attributes: [NSAttributedString.Key: Any] = [
@@ -112,6 +119,23 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate {
                 textField.attributedText = NSMutableAttributedString.init(string: textFieldValue, attributes: attributes)
                 textField.delegate = self
                 cell.accessoryView = textField
+
+            case .conferenceType:
+                let conferenceRoomTypes = ["MESH", "SFU"]
+                let segmentedControl = UISegmentedControl(items: conferenceRoomTypes)
+                let conferenceTypeIdx = conferenceRoomTypes.firstIndex(of: SettingsTableViewController.conferenceType) ?? 0
+                segmentedControl.selectedSegmentIndex = conferenceTypeIdx
+
+                segmentedControl.frame = CGRect(x: 35, y: 200, width: 140, height: 30)
+                segmentedControl.addTarget(self, action: #selector(conferenceTypeSelected(_:)), for: .valueChanged)
+
+                if #available(iOS 13.0, *) {
+                    segmentedControl.selectedSegmentTintColor = .systemGreen
+                } else {
+                    // Fallback on earlier versions
+                }
+
+                cell.accessoryView = segmentedControl
         }
 
         return cell
@@ -133,7 +157,9 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate {
             case .preferredCodec,
                  .serverAddress,
                  .userName,
-                 .password:
+                 .password,
+                 .conferenceType,
+                 .upgradeConferenceType:
                 Logger.debug(logTag, "unexpected event")
         }
         UserDefaults.standard.setValue(isOn, forKey: "RealtimeSDKDemo_\(type.rawValue)")
@@ -144,6 +170,13 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate {
         Logger.debug(logTag, "\(codecType) Codec selected")
 
         SettingsTableViewController.preferredVideoCodec = codecType
+    }
+
+    @objc func conferenceTypeSelected(_ segmentedControl: UISegmentedControl) {
+        let conferenceType = segmentedControl.titleForSegment(at: segmentedControl.selectedSegmentIndex) ?? "MESH"
+        Logger.debug(logTag, "\(conferenceType) Conference Room Type selected")
+
+        SettingsTableViewController.conferenceType = conferenceType
     }
 
     static func isSet(_ type: SettingType) -> Bool {
@@ -161,6 +194,22 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate {
 
         set {
             UserDefaults.standard.setValue(newValue, forKey: "RealtimeSDKDemo_\(SettingType.preferredCodec.rawValue)")
+        }
+    }
+
+    static var conferenceType: String {
+        get {
+            return UserDefaults.standard.object(forKey: "RealtimeSDKDemo_\(SettingType.conferenceType.rawValue)") as? String ?? "MESH"
+        }
+
+        set {
+            UserDefaults.standard.setValue(newValue, forKey: "RealtimeSDKDemo_\(SettingType.conferenceType.rawValue)")
+        }
+    }
+
+    static var upgradeOnParticipant: String {
+        get {
+            return UserDefaults.standard.object(forKey: "RealtimeSDKDemo_\(SettingType.upgradeConferenceType.rawValue)") as? String ?? "0"
         }
     }
 

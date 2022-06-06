@@ -132,6 +132,18 @@ class RealtimeSDKManager {
 }
 
 extension RealtimeSDKManager: RealtimeSDKProtocol {
+    func onRoomUpdated(room: Room) {
+
+    }
+
+    func onActiveSpeakerUpdated(room: Room, activeSpeakers: [String]) {
+
+    }
+
+    func onRemoteAudioStream(room: Room, connected: Bool) {
+
+    }
+
 
     func onRoomInitialized(room: Room) {
         self.room = room
