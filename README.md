@@ -40,7 +40,7 @@ Once Xcode finds the package, select *Up to Next Major Version* for the Dependen
 https://github.com/ATOS-VIRTUAL-CARE/webrtc-ios
 ```
 
-Once Xcode finds the package, select *Exact Version* for the Dependency Rule and select version 98.0.0.
+Once Xcode finds the package, select *Exact Version* for the Dependency Rule and select version 100.0.0.
 
 ```html
 https://github.com/apollographql/apollo-ios
