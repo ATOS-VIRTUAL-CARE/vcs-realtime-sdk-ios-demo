@@ -20,7 +20,7 @@ git clone https://github.com/ATOS-VIRTUAL-CARE/vcs-realtime-sdk-ios-demo.git
 cd vcs-realtime-sdk-ios-demo
 ```
 
-Using Xcode version 13.2.1 is recommended for developing with the iOS SDK at this time.
+Using Xcode version 14 is recommended for developing with the iOS SDK at this time.
 
 Using Xcode, open the ```RealtimeSDKDemo.xcodeproj``` file in the ```examples/RealtimeSDKDemo``` directory. Then perform the following steps:
 
@@ -40,7 +40,7 @@ Once Xcode finds the package, select *Up to Next Major Version* for the Dependen
 https://github.com/ATOS-VIRTUAL-CARE/webrtc-ios
 ```
 
-Once Xcode finds the package, select *Exact Version* for the Dependency Rule and select version 100.0.0.
+Once Xcode finds the package, select *Exact Version* for the Dependency Rule and select version 104.0.0.
 
 ```html
 https://github.com/apollographql/apollo-ios
